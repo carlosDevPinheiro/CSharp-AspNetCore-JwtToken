@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SecurityToken.ProviderJWT;
 using WebApi_JWT.Models;
-using WebApi_JWT.ProviderJWT;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,19 +14,23 @@ namespace WebApi_JWT.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Produces("application/json")]
-        public IActionResult CreateToken([FromBody] Usuario user)
+        public IActionResult Token([FromBody] Usuario user)
         {
+            /// Postman
+            ///http://localhost:64442/api/ListarProdutos
+            ///      {
+            ///           "name":"carlos",
+            ///           "password":"123456",
+            ///            "tipo":0
+            ///      }
+            ///
+            ///     tipo 1 UsuarioComum
+            ///     tipo 0 Administrador
+
             if (user.name != "carlos" || user.password != "123456")
                 return Unauthorized();
 
-            var token = new TokenJWTBuilder()
-                .AddSecurityKey(JWTSecurityKey.Create("Secret_Key-12345678"))
-                .AddSubject("Valdir Ferreira")
-                .AddIssuer("Teste.Securiry.Bearer")
-                .AddAudience("Teste.Securiry.Bearer")
-                .AddClaim("UsuarioAPINumero", "1")
-                .AddExpiry(5)
-                .Builder();
+            var token = JwtBearerBuilder.Create(user.tipo);
 
             return Ok(token.value);
         }

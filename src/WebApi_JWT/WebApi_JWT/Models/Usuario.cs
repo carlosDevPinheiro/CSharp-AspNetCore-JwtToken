@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using SecurityToken.ProviderJWT;
 
 namespace WebApi_JWT.Models
 {
@@ -10,5 +7,9 @@ namespace WebApi_JWT.Models
         public string name { get; set; }
 
         public string password { get; set; }
+
+        public ETypeUser tipo { get; set; }
+
+        
     }
 }
